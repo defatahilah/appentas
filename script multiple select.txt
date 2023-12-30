@@ -1,0 +1,72 @@
+<form action="your_controller/your_function" method="post">
+   <select name="options[]" multiple>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+   </select>
+   <input type="submit" value="Submit">
+</form>
+
+pada controller
+public function your_function() {
+   $options = $this->input->post('options');
+   // proses data
+}
+
+public function your_function() {
+   $this->form_validation->set_rules('options[]', 'Options', 'required');
+   if ($this->form_validation->run() == FALSE) {
+      // tampilkan form
+   } else {
+      $options = $this->input->post('options');
+      // proses data
+   }
+}
+
+
+javascript
+<script>
+   $(document).ready(function() {
+      $('select[multiple]').change(function() {
+         // kode interaksi
+      });
+   });
+</script>
+
+
+<script>
+   $(document).ready(function() {
+      $('select[multiple]').change(function() {
+         var selected = [];
+         $('option:selected', this).each(function() {
+            selected.push($(this).val());
+         });
+         alert("Anda memilih opsi: " + selected.join(', '));
+      });
+   });
+</script>
+
+
+
+model
+public function save_options($options) {
+   $data = array();
+   foreach ($options as $option) {
+      $data[] = array(
+         'option' => $option
+      );
+   }
+   $this->db->insert_batch('your_table', $data);
+}
+
+
+public function your_function() {
+   $this->form_validation->set_rules('options[]', 'Options', 'required');
+   if ($this->form_validation->run() == FALSE) {
+      // tampilkan form
+   } else {
+      $options = $this->input->post('options');
+      $this->your_model->save_options($options);
+      // redirect atau proses lain
+   }
+}
